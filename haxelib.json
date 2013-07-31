@@ -1,0 +1,13 @@
+{
+  "name": "Plot",
+  "url": "",
+  "license": "MIT",
+  "tags": ["graph", "plot", "openfl"],
+  "description": "Openfl data plotter",
+  "version": "1.0.0-alpha",
+  "releasenote": "",
+  "contributors": [""],
+  "dependencies": {
+      "openfl": "1.0.5"
+  }
+}

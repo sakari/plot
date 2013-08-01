@@ -9,12 +9,7 @@ class Main extends Sprite {
  		super ();
         var plot = new Plot(300, 100);
         addChild(plot);
-        var data = new Array<{x: Float, y: Float}>();
-        data.push({x: 1, y: 1});
-        data.push({x: 2, y: 4});
-        data.push({x: 3, y: 2});
-        data.push({x: 4, y: 3});
-        data.push({x: 5, y: 5});
+        var data = [1, 1.1, 1.5, 2, 2.2, 4, 5, 6.1];
         plot.plot(data);
 	}
 }

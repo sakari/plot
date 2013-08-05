@@ -7,9 +7,9 @@ import flash.display.Sprite;
 class Main extends Sprite {
 	public function new () {
  		super ();
-        var plot = new Plot(300, 100);
+        var plot = new Plot(300, 300);
         addChild(plot);
-        var data = [1, 1.1, 1.5, 2, 2.2, 4, 5, 6.1];
+        var data = [for(i in 0 ... 1000) Math.random() * 100];
         plot.plot(data);
 	}
 }

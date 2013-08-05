@@ -12,8 +12,8 @@ class Plot extends Sprite{
     var pad: Point;
 
     public function new(width: Int, height: Int) {
-        this.w = width;
-        this.h = height;
+        this.w = width - 40;
+        this.h = height - 40;
         this.pad = new Point(20, 20);
         super();
 	}

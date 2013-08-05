@@ -77,8 +77,6 @@ class Axis extends Sprite {
                 label.field.x = pad;
                 label.field.y = this.scaled.translateY(label.tick);
             }
-
         }
-
     }
 }

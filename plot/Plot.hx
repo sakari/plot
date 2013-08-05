@@ -1,17 +1,20 @@
 package plot;
-import flash.display.Shape;
+import flash.display.Sprite;
 import plot.Scaled;
 import flash.geom.Point;
+import flash.text.TextField;
 
 using Lambda;
 
-class Plot extends Shape{
-    private var w: Int;
-    private var h: Int;
+class Plot extends Sprite{
+    var w: Int;
+    var h: Int;
+    var pad: Point;
 
     public function new(width: Int, height: Int) {
         this.w = width;
         this.h = height;
+        this.pad = new Point(20, 20);
         super();
 	}
 
@@ -21,7 +24,7 @@ class Plot extends Shape{
     }
 
     private function axisUnit(range: Float): Float {
-        var rangeScale = range / 100;
+        var rangeScale = range / 10;
         var log = Math.log(rangeScale) / Math.log(10);
         return Math.pow(10, Math.round(log));
     }
@@ -46,7 +49,7 @@ class Plot extends Shape{
         var min = data[0];
         var max = data[data.length - 1];
         var range = max - min;
-        var bucketSize = range / data.length;
+        var bucketSize = (range / data.length) * 10;
 
         return data.fold(function(d, bucket: Array<{x: Float, y: Float}>) {
                 var top = bucket[bucket.length - 1];
@@ -60,6 +63,11 @@ class Plot extends Shape{
     }
 
     private function construct(data:Array<{x: Float, y: Float}>) {
+        var plot = new Sprite();
+        plot.x = this.pad.x;
+        plot.y = this.pad.y;
+        this.addChild(plot);
+
         var leftmost = data[0];
         var rightmost = data[data.length - 1];
 
@@ -85,41 +93,29 @@ class Plot extends Shape{
                                                    , yAxis[yAxis.length - 1])
             });
 
-        this.graphics.clear();
-        this.graphics.lineStyle(2, 0x00ff00);
-        this.graphics.drawRect(0, 0, this.w, this.h);
-
-        this.graphics.lineStyle();
-        this.graphics.beginFill(0xff0000);
+        plot.graphics.clear();
+        plot.graphics.lineStyle();
+        plot.graphics.beginFill(0xff0000);
         
-        this.graphics.moveTo(scaled.translateX(xAxis[0]), scaled.translateY(yAxis[0]));
+        plot.graphics.moveTo(scaled.translateX(xAxis[0])
+                             , scaled.translateY(yAxis[0]));
         for(point in data) {
-            this.graphics.lineTo(scaled.translateX(point.x)
+            plot.graphics.lineTo(scaled.translateX(point.x)
                                  , scaled.translateY(point.y));
         }
-        this.graphics.lineTo(scaled.translateX(xAxis[xAxis.length - 1]), 
+        plot.graphics.lineTo(scaled.translateX(xAxis[xAxis.length - 1]), 
                              scaled.translateY(yAxis[0]));
-        for(point in data) {
-            this.graphics.drawCircle(scaled.translateX(point.x)
-                                     , scaled.translateY(point.y)
-                                     , 3);
-        }
 
-        this.graphics.endFill();
+        plot.graphics.endFill();
 
-        this.graphics.lineStyle(4, 0x000000);        
-        this.graphics.moveTo(scaled.translateX(xAxis[0])
-                             , scaled.translateY(yAxis[0]));
-        for(tick in xAxis) {
-            this.graphics.lineTo(scaled.translateX(tick)
-                                 , scaled.translateY(yAxis[0]));
-        }
-        this.graphics.lineStyle(4, 0x0000ff);        
-        this.graphics.moveTo(scaled.translateX(xAxis[0])
-                             , scaled.translateY(yAxis[0]));
-        for(tick in yAxis) {
-            this.graphics.lineTo(scaled.translateX(xAxis[0])
-                                 , scaled.translateY(tick));
-        }
+        var x_axis_sprite = new Axis(xAxis, scaled, true);
+        x_axis_sprite.x = this.pad.x + scaled.translateX(xAxis[0]);
+        x_axis_sprite.y = this.pad.y + scaled.translateY(yAxis[0]);
+        this.addChild(x_axis_sprite);
+
+        var y_axis_sprite = new Axis(yAxis, scaled, false);
+        y_axis_sprite.x = this.pad.x + scaled.translateX(xAxis[0]);
+        y_axis_sprite.y = this.pad.y;
+        this.addChild(y_axis_sprite);
     }
 }

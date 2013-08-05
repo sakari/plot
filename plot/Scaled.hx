@@ -26,13 +26,13 @@ class Scaled {
     public function translateX(x): Float {
         if(x < this.min.x || x > this.max.x)
             throw 'point outside X range: $x';
-        return (x - this.min.x) * this.x_scale;
+        return Math.floor((x - this.min.x) * this.x_scale) + .5;
     }
 
     public function translateY(y): Float {
         if(y < this.min.y || y > this.max.y)
             throw 'point outside Y range: $y';
-        return (this.max.y - y) * this.y_scale;
+        return Math.floor((this.max.y - y) * this.y_scale) + .5;
     }
 
 }

@@ -109,12 +109,12 @@ class Plot extends Sprite{
         plot.graphics.endFill();
 
         var x_axis_sprite = new Axis(xAxis, scaled, true);
-        x_axis_sprite.x = this.pad.x + scaled.translateX(xAxis[0]);
-        x_axis_sprite.y = this.pad.y + scaled.translateY(yAxis[0]);
+        x_axis_sprite.x = this.pad.x + scaled.translateX(xAxis[0]) - .5;
+        x_axis_sprite.y = this.pad.y + scaled.translateY(yAxis[0]) - .5;
         this.addChild(x_axis_sprite);
 
         var y_axis_sprite = new Axis(yAxis, scaled, false);
-        y_axis_sprite.x = this.pad.x + scaled.translateX(xAxis[0]);
+        y_axis_sprite.x = this.pad.x + scaled.translateX(xAxis[0]) - .5;
         y_axis_sprite.y = this.pad.y;
         this.addChild(y_axis_sprite);
     }

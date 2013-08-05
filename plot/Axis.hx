@@ -24,9 +24,7 @@ class Axis extends Sprite {
         super();
         this.scaled = scaled;
         this.horizontal = horizontal;
-        trace('uuu');
         this.labels = Axis.makeLabels(ticks);
-        trace('aa');
         this.construct();
     }
 
@@ -57,23 +55,24 @@ class Axis extends Sprite {
     function construct() {
         var pad = this.horizontal ? this.bottomPad() : -this.leftPad();
         this.graphics.lineStyle(1, 0x000000);
+        this.graphics.moveTo(.5, .5);
         for(label in this.labels) {
             if(this.horizontal)  {
-                this.graphics.lineTo(this.scaled.translateX(label.tick), 0);
+                this.graphics.lineTo(this.scaled.translateX(label.tick), 0.5);
             } else {
-                this.graphics.lineTo(0, this.scaled.translateY(label.tick));
+                this.graphics.lineTo(0.5, this.scaled.translateY(label.tick));
             }
         }
         for(label in this.labels) {
             this.addChild(label.field);
             if(this.horizontal) {
-                this.graphics.moveTo(this.scaled.translateX(label.tick), 0);
-                this.graphics.lineTo(this.scaled.translateX(label.tick), -5); 
+                this.graphics.moveTo(this.scaled.translateX(label.tick), 0.5);
+                this.graphics.lineTo(this.scaled.translateX(label.tick), -4.5); 
                 label.field.x = this.scaled.translateX(label.tick);
                 label.field.y = pad;
             } else {
-                this.graphics.moveTo(0, this.scaled.translateY(label.tick));
-                this.graphics.lineTo(5, this.scaled.translateY(label.tick)); 
+                this.graphics.moveTo(0.5, this.scaled.translateY(label.tick));
+                this.graphics.lineTo(5.5, this.scaled.translateY(label.tick)); 
                 label.field.x = pad;
                 label.field.y = this.scaled.translateY(label.tick);
             }

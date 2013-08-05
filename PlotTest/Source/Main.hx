@@ -12,7 +12,7 @@ class Main extends Sprite {
         var plot = new Plot(Lib.current.stage.stageWidth
                             , Lib.current.stage.stageHeight);
         addChild(plot);
-        var data = [for(i in 0 ... 1000) Math.random() * 100];
+        var data = [for(i in 0 ... 100000) Math.random() * 10];
         plot.plot(data);
 	}
 }

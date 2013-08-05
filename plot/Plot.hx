@@ -49,7 +49,8 @@ class Plot extends Sprite{
         var min = data[0];
         var max = data[data.length - 1];
         var range = max - min;
-        var bucketSize = (range / data.length) * 10;
+        var minimumBucket = 3 / (this.w / range);
+        var bucketSize = Math.max((range / data.length) * 10, minimumBucket);
 
         return data.fold(function(d, bucket: Array<{x: Float, y: Float}>) {
                 var top = bucket[bucket.length - 1];

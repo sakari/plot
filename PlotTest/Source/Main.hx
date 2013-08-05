@@ -20,6 +20,9 @@ class Main extends Sprite {
                             , Lib.current.stage.stageHeight);
         addChild(plot);
         var data = [for(i in 0 ... 100000) variable()];
-        plot.plot(data);
+        plot
+            .colour(0xff0000, 0.5)
+            .data(data)
+            .plot();
 	}
 }

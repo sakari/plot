@@ -10,6 +10,9 @@ class Plot extends Sprite{
     var w: Int;
     var h: Int;
     var pad: Point;
+    var fillRGB: Int;
+    var fillAlpha: Float;
+    var bucketed: Array<{x: Float, y: Float}>;
 
     public function new(width: Int, height: Int) {
         this.w = width - 40;
@@ -18,9 +21,18 @@ class Plot extends Sprite{
         super();
 	}
 
-    public function plot(data:Array<Float>) {
-        var bucketed = this.bucketize(data.copy());
-        this.construct(bucketed);
+    public function colour(rgb: Int, alpha: Float): Plot {
+        this.fillRGB = rgb;
+        this.fillAlpha = alpha;
+        return this;
+    }
+
+    public function data(data: Array<Float>): Plot {
+        this.bucketed = this.bucketize(data.copy());
+        return this;
+    }
+    public function plot(): Void {
+        this.construct(this.bucketed);
     }
 
     private function axisUnit(range: Float): Float {
@@ -96,7 +108,7 @@ class Plot extends Sprite{
 
         plot.graphics.clear();
         plot.graphics.lineStyle();
-        plot.graphics.beginFill(0xff0000);
+        plot.graphics.beginFill(this.fillRGB, this.fillAlpha);
         
         plot.graphics.moveTo(scaled.translateX(xAxis[0])
                              , scaled.translateY(yAxis[0]));

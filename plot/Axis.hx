@@ -68,13 +68,13 @@ class Axis extends Sprite {
             if(this.horizontal) {
                 this.graphics.moveTo(this.scaled.translateX(label.tick), 0.5);
                 this.graphics.lineTo(this.scaled.translateX(label.tick), -4.5); 
-                label.field.x = this.scaled.translateX(label.tick);
+                label.field.x = this.scaled.translateX(label.tick) - label.field.textWidth / 2;
                 label.field.y = pad;
             } else {
                 this.graphics.moveTo(0.5, this.scaled.translateY(label.tick));
                 this.graphics.lineTo(5.5, this.scaled.translateY(label.tick)); 
                 label.field.x = pad;
-                label.field.y = this.scaled.translateY(label.tick);
+                label.field.y = this.scaled.translateY(label.tick) - label.field.textHeight / 2;
             }
         }
     }

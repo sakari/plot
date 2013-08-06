@@ -23,6 +23,7 @@ class Main extends Sprite {
         plot
             .colour(0xff0000, 0.5)
             .data(data)
+            .selectOver(3)
             .plot();
 	}
 }

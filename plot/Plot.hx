@@ -1,6 +1,7 @@
 package plot;
 import flash.display.Sprite;
 import plot.Scaled;
+import plot.PlotSelection;
 import flash.geom.Point;
 import flash.text.TextField;
 
@@ -13,6 +14,8 @@ class Plot extends Sprite{
     var fillRGB: Int;
     var fillAlpha: Float;
     var bucketed: Array<{x: Float, y: Float}>;
+    var lowBorderAt: Null<Float>;
+    var highBorderAt: Null<Float>;
 
     public function new(width: Int, height: Int) {
         this.w = width - 40;
@@ -20,6 +23,16 @@ class Plot extends Sprite{
         this.pad = new Point(20, 20);
         super();
 	}
+
+    public function selectOver(p: Float): Plot{
+        lowBorderAt = p;
+        return this;
+    }
+    
+    public function selectUnder(p: Float): Plot {
+        highBorderAt = p;
+        return this;
+    }
 
     public function colour(rgb: Int, alpha: Float): Plot {
         this.fillRGB = rgb;
@@ -120,6 +133,22 @@ class Plot extends Sprite{
                              scaled.translateY(yAxis[0]));
 
         plot.graphics.endFill();
+
+        if(lowBorderAt != null || highBorderAt != null) {
+            if(lowBorderAt == null) {
+                lowBorderAt = xAxis[0];
+            }
+            if(highBorderAt == null) {
+                highBorderAt = xAxis[xAxis.length - 1];
+            }
+            var selection = new PlotSelection(scaled.translateX(highBorderAt) 
+                                              - scaled.translateX(lowBorderAt)
+                                              , scaled.translateY(yAxis[0])
+                                              - scaled.translateY(yAxis[yAxis.length - 1]));
+            selection.x = this.pad.x + scaled.translateX(lowBorderAt);
+            selection.y = this.pad.y;
+            this.addChild(selection);
+        }
 
         var x_axis_sprite = new Axis(xAxis, scaled, true);
         x_axis_sprite.x = this.pad.x + scaled.translateX(xAxis[0]) - .5;

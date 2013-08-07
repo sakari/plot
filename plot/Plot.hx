@@ -132,6 +132,38 @@ class Plot extends Sprite{
                                 , topmost.y);
     }
 
+    private function xAxisSprite(xAxis, yAxis, scaled) {
+        var sprite = new Axis(xAxis, scaled, true);
+        sprite.x = this.pad.x + scaled.translateX(xAxis[0]) - .5;
+        sprite.y = this.pad.y + scaled.translateY(yAxis[0]) - .5;
+        return sprite;
+    }
+
+    private function yAxisSprite(xAxis, yAxis, scaled) {
+        var sprite = new Axis(yAxis, scaled, false);
+        sprite.x = this.pad.x + scaled.translateX(xAxis[0]) - .5;
+        sprite.y = this.pad.y;
+        return sprite;
+    }
+
+    private function addPlotSelectionSprite(xAxis, yAxis, scaled: Scaled) {
+        if(lowBorderAt != null || highBorderAt != null) {
+            if(lowBorderAt == null) {
+                lowBorderAt = xAxis[0];
+            }
+            if(highBorderAt == null) {
+                highBorderAt = xAxis[xAxis.length - 1];
+            }
+            var selection = new PlotSelection(scaled.translateX(highBorderAt) 
+                                              - scaled.translateX(lowBorderAt)
+                                              , scaled.translateY(yAxis[0])
+                                              - scaled.translateY(yAxis[yAxis.length - 1]));
+            selection.x = this.pad.x + scaled.translateX(lowBorderAt);
+            selection.y = this.pad.y;
+            addChild(selection);
+        }
+    }
+
     private function construct(data:Array<{x: Float, y: Float}>) {
 
         var xAxis = xAxisPoints(data);
@@ -148,30 +180,8 @@ class Plot extends Sprite{
                                  , new Point(xAxis[0], yAxis[0])
                                  , new Point(xAxis[xAxis.length - 1], yAxis[0])));
 
-        if(lowBorderAt != null || highBorderAt != null) {
-            if(lowBorderAt == null) {
-                lowBorderAt = xAxis[0];
-            }
-            if(highBorderAt == null) {
-                highBorderAt = xAxis[xAxis.length - 1];
-            }
-            var selection = new PlotSelection(scaled.translateX(highBorderAt) 
-                                              - scaled.translateX(lowBorderAt)
-                                              , scaled.translateY(yAxis[0])
-                                              - scaled.translateY(yAxis[yAxis.length - 1]));
-            selection.x = this.pad.x + scaled.translateX(lowBorderAt);
-            selection.y = this.pad.y;
-            this.addChild(selection);
-        }
-
-        var x_axis_sprite = new Axis(xAxis, scaled, true);
-        x_axis_sprite.x = this.pad.x + scaled.translateX(xAxis[0]) - .5;
-        x_axis_sprite.y = this.pad.y + scaled.translateY(yAxis[0]) - .5;
-        this.addChild(x_axis_sprite);
-
-        var y_axis_sprite = new Axis(yAxis, scaled, false);
-        y_axis_sprite.x = this.pad.x + scaled.translateX(xAxis[0]) - .5;
-        y_axis_sprite.y = this.pad.y;
-        this.addChild(y_axis_sprite);
+        addPlotSelectionSprite(xAxis, yAxis, scaled);
+        this.addChild(xAxisSprite(xAxis, yAxis, scaled));
+        this.addChild(yAxisSprite(xAxis, yAxis, scaled));
     }
 }

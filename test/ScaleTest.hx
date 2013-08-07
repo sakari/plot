@@ -29,20 +29,20 @@ class ScaleTest
 	public function translate_keeps_x_axis(): Void
 	{
         var translated = this.scaled.translate(1, 2);
-        Assert.areEqual(0, translated.x);
+        Assert.areEqual(.5, translated.x);
 	}
 
     @Test
     public function translate_flips_y_axis(): Void {
         var t = this.scaled.translate(1, 4);
-        Assert.areEqual(0, t.y);
+        Assert.areEqual(.5, t.y);
     }
 
     @Test
     public function translate_throws_for_points_under_the_minimum(): Void {
         var err = false;
         try {
-            this.scaled.translate(0, 0);
+            this.scaled.translate(.5, .5);
         } catch(msg: String) {
             err = true;
         }
@@ -53,7 +53,7 @@ class ScaleTest
     public function translate_throws_for_points_over_the_maximum(): Void {
         var err = false;
         try {
-            this.scaled.translate(10, 10);
+            this.scaled.translate(10.5, 10.5);
         } catch(msg: String) {
             err = true;
         }
@@ -63,8 +63,8 @@ class ScaleTest
     @Test
     public function translate_scales_the_point(): Void {
         var t = this.scaled.translate(3, 2);
-        Assert.areEqual(10, t.x);
-        Assert.areEqual(20, t.y);
+        Assert.areEqual(10.5, t.x);
+        Assert.areEqual(20.5, t.y);
     }
 
     

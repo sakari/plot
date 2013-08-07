@@ -146,22 +146,13 @@ class Plot extends Sprite{
         return sprite;
     }
 
-    private function addPlotSelectionSprite(xAxis, yAxis, scaled: Scaled) {
-        if(lowBorderAt != null || highBorderAt != null) {
-            if(lowBorderAt == null) {
-                lowBorderAt = xAxis[0];
-            }
-            if(highBorderAt == null) {
-                highBorderAt = xAxis[xAxis.length - 1];
-            }
-            var selection = new PlotSelection(scaled.translateX(highBorderAt) 
-                                              - scaled.translateX(lowBorderAt)
-                                              , scaled.translateY(yAxis[0])
-                                              - scaled.translateY(yAxis[yAxis.length - 1]));
-            selection.x = this.pad.x + scaled.translateX(lowBorderAt);
-            selection.y = this.pad.y;
-            addChild(selection);
-        }
+    private function createPlotSelectionSprite(xAxis, yAxis, scaled: Scaled) {
+        var selection = new PlotSelection(xAxis
+                                          , yAxis
+                                          , scaled);
+        selection.x = this.pad.x;
+        selection.y = this.pad.y;
+        return selection;
     }
 
     private function construct(data:Array<{x: Float, y: Float}>) {
@@ -180,8 +171,8 @@ class Plot extends Sprite{
                                  , new Point(xAxis[0], yAxis[0])
                                  , new Point(xAxis[xAxis.length - 1], yAxis[0])));
 
-        addPlotSelectionSprite(xAxis, yAxis, scaled);
         this.addChild(xAxisSprite(xAxis, yAxis, scaled));
         this.addChild(yAxisSprite(xAxis, yAxis, scaled));
+        this.addChild(createPlotSelectionSprite(xAxis, yAxis, scaled));
     }
 }

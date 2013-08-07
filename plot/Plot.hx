@@ -94,7 +94,7 @@ class Plot extends Sprite{
                                 , end: Point): Sprite {
 
         var plot = new Sprite();
-        plot.x = this.pad.x;
+        plot.x = this.pad.x - .5;
         plot.y = this.pad.y;
         plot.graphics.lineStyle();
         plot.graphics.beginFill(this.fillRGB, this.fillAlpha);
@@ -150,7 +150,7 @@ class Plot extends Sprite{
         var selection = new PlotSelection(xAxis
                                           , yAxis
                                           , scaled);
-        selection.x = this.pad.x;
+        selection.x = this.pad.x - .5;
         selection.y = this.pad.y;
         return selection;
     }

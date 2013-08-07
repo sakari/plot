@@ -4,8 +4,8 @@ import flash.geom.Point;
 class Scaled {
     private var w: Float;
     private var h: Float;
-    private var min: Point;
-    private var max: Point;
+    public var min: Point;
+    public var max: Point;
     private var x_scale: Float;
     private var y_scale: Float;
 

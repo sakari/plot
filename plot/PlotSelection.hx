@@ -51,35 +51,44 @@ class PlotSelection extends Sprite {
                                        , 0
                                        , scaled.translateX(hi) - scaled.translateX(low)
                                        , scaled.translateY(yAxis[0]));
-        trace('low', low, 'hi', hi);
     }
 
     private function clearMoveListeners(e: MouseEvent) {
-        stage.removeEventListener(MouseEvent.MOUSE_MOVE, moveLowBorder);
-        stage.removeEventListener(MouseEvent.MOUSE_MOVE, moveHiBorder);
+        hitArea.removeEventListener(MouseEvent.MOUSE_MOVE, moveLowBorder);
+        hitArea.removeEventListener(MouseEvent.MOUSE_MOVE, moveHiBorder);
         stage.removeEventListener(MouseEvent.MOUSE_UP, clearMoveListeners);
     }
 
     private function startMoveLowBorder(e: MouseEvent) {
-        stage.addEventListener(MouseEvent.MOUSE_MOVE, moveLowBorder);
+        hitArea.addEventListener(MouseEvent.MOUSE_MOVE, moveLowBorder);
         stage.addEventListener(MouseEvent.MOUSE_UP, clearMoveListeners);
         moveLowBorder(e);
     }
 
     private function startMoveHiBorder(e: MouseEvent) {
-        stage.addEventListener(MouseEvent.MOUSE_MOVE, moveHiBorder);
+        hitArea.addEventListener(MouseEvent.MOUSE_MOVE, moveHiBorder);
         stage.addEventListener(MouseEvent.MOUSE_UP, clearMoveListeners);
         moveHiBorder(e);
     }
 
     private function moveLowBorder(e: MouseEvent) {
         lowBorder = scaled.unscaleX(e.localX);
+        trace(lowBorder, e.localX);
+        if(lowBorder < scaled.min.x)
+            lowBorder = scaled.min.x;
+        if(lowBorder > scaled.max.x)
+            lowBorder = scaled.max.x;
         drawSelectRegion();
     }
 
     private function moveHiBorder(e: MouseEvent) {
         hiBorder = scaled.unscaleX(e.localX);
+        if(hiBorder < scaled.min.x)
+            hiBorder = scaled.min.x;
+        if(hiBorder > scaled.max.x)
+            hiBorder = scaled.max.x;
         drawSelectRegion();
+        return;
     }
 
     private function adjustSelectRegion(event: MouseEvent) {

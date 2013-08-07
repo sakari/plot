@@ -88,29 +88,54 @@ class Plot extends Sprite{
             }, [{x: min, y: 0.0}]);
     }
 
-    private function construct(data:Array<{x: Float, y: Float}>) {
+    private function plotSprite(scaled: Scaled 
+                                , data: Array<{x: Float, y: Float}>
+                                , start: Point
+                                , end: Point): Sprite {
+
         var plot = new Sprite();
         plot.x = this.pad.x;
         plot.y = this.pad.y;
-        this.addChild(plot);
+        plot.graphics.lineStyle();
+        plot.graphics.beginFill(this.fillRGB, this.fillAlpha);
 
+        plot.graphics.moveTo(scaled.translateX(start.x)
+                             , scaled.translateY(start.y));
+        for(point in data) {
+            plot.graphics.lineTo(scaled.translateX(point.x)
+                                 , scaled.translateY(point.y));
+        }
+        plot.graphics.lineTo(scaled.translateX(end.x)
+                             , scaled.translateY(end.y));
+        return plot;
+    }
+
+    private function xAxisPoints(data:Array<{x: Float, y: Float}>) {
         var leftmost = data[0];
         var rightmost = data[data.length - 1];
 
+        return this.axisPoints( leftmost.x
+                                , rightmost.x);        
+    }
+
+    private function yAxisPoints(data:Array<{x: Float, y: Float}>) {
         var topmost = data.fold(function(p, top) {
                 if(p.y > top.y) return p;
                 return top;
-            }, leftmost);
+            }, data[0]);
 
         var bottommost = data.fold(function(p, bottom) {
                 if(p.y < bottom.y) return p;
                 return bottom;
-            }, leftmost);
+            }, data[0]);
+        return this.axisPoints( bottommost.y
+                                , topmost.y);
+    }
 
-        var xAxis = this.axisPoints( leftmost.x
-                                    , rightmost.x);
-        var yAxis = this.axisPoints( bottommost.y
-                                    , topmost.y);
+    private function construct(data:Array<{x: Float, y: Float}>) {
+
+        var xAxis = xAxisPoints(data);
+        var yAxis = yAxisPoints(data);
 
         var scaled = new Scaled({ width: this.w 
                                   , height: this.h
@@ -118,21 +143,10 @@ class Plot extends Sprite{
                                   , max: new Point(xAxis[xAxis.length - 1]
                                                    , yAxis[yAxis.length - 1])
             });
-
-        plot.graphics.clear();
-        plot.graphics.lineStyle();
-        plot.graphics.beginFill(this.fillRGB, this.fillAlpha);
-        
-        plot.graphics.moveTo(scaled.translateX(xAxis[0])
-                             , scaled.translateY(yAxis[0]));
-        for(point in data) {
-            plot.graphics.lineTo(scaled.translateX(point.x)
-                                 , scaled.translateY(point.y));
-        }
-        plot.graphics.lineTo(scaled.translateX(xAxis[xAxis.length - 1]), 
-                             scaled.translateY(yAxis[0]));
-
-        plot.graphics.endFill();
+        this.addChild(plotSprite(scaled
+                                 , data
+                                 , new Point(xAxis[0], yAxis[0])
+                                 , new Point(xAxis[xAxis.length - 1], yAxis[0])));
 
         if(lowBorderAt != null || highBorderAt != null) {
             if(lowBorderAt == null) {

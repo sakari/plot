@@ -23,6 +23,10 @@ class Scaled {
         return new Point(this.translateX(x), this.translateY(y));
     }
 
+    public function unscaleX(x: Float): Float {
+        return (x / this.x_scale) + this.min.x;
+    }
+
     public function translateX(x): Float {
         if(x < this.min.x || x > this.max.x)
             throw 'point outside X range: $x';

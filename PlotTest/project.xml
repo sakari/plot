@@ -7,6 +7,7 @@
 	<source path="Source" />
 	
 	<haxelib name="openfl" />
+	<haxelib name="random" />
     <haxelib name="Plot" />
 	<window antialiasing="4" />
 	<assets path="Assets" rename="assets" exclude="openfl.svg" />
